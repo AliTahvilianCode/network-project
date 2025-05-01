@@ -1,0 +1,42 @@
+<!-- blocked.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Account Blocked</title>
+  <style>
+    body {
+      background-color: #ECEFCA;
+      font-family: 'Vazir', sans-serif;
+      direction: ltr;
+      text-align: center;
+      padding: 60px;
+      color: #213448;
+    }
+    .box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: inline-block;
+    }
+    .btn {
+      background-color: #547792;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🚫 Access Denied</h2>
+    <p>Your account is still blocked for {{ remaining }} more minute(s).</p>
+    <a href="/"><button class="btn">Back to Home</button></a>
+  </div>
+</body>
+</html>

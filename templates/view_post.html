@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ preview }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        body {
+            background: linear-gradient(-45deg, #1e1e2f, #282846, #3e3e5f, #505073);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
+            font-family: 'Inter', sans-serif;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: rgba(25, 25, 40, 0.95);
+            border: 1px solid #444;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 20px;
+        }
+
+        p {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            background-color: #547792;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .button:hover {
+            background-color: #415d72;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .button.delete {
+            background-color: #c0392b;
+        }
+
+        .button.delete:hover {
+            background-color: #992d22;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ preview }}</h2>
+        <p>{{ post.content }}</p>
+        <div class="actions">
+            <button class="button" onclick="window.history.back()">Back</button>
+
+            {% if role == 'admin' %}
+            <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post" style="display:inline;">
+                <button type="submit" class="button delete">🗑️ Delete Post</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

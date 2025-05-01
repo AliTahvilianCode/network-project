@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Posts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+
+        body {
+            background: linear-gradient(-45deg, #1e1e2f, #282846, #3e3e5f, #505073);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            font-family: 'Vazir', sans-serif;
+            margin: 0;
+            color: #e0e0e0;
+            display: flex;
+        }
+        .sidebar {
+                width: 220px;
+                background-color: rgba(20, 20, 35, 0.9);
+                padding: 20px;
+                border-radius: 0 15px 15px 0;
+                height: 100vh;
+                overflow-y: auto;
+                position: sticky;
+                top: 0;
+            }
+
+        .sidebar-user {
+            background-color: #547792;
+            color: #ECEFCA;
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar-user:hover {
+            background-color: #94B4C1;
+        }
+        .main-content {
+                flex-grow: 1;
+                padding: 40px;
+        }
+
+        h2 {
+            color: #ECEFCA;
+            margin-bottom: 20px;
+        }
+
+
+    .user-block {
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid #547792;
+            margin: 20px 0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+        }
+
+
+        .user-header {
+                font-weight: bold;
+                font-size: 20px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: #ECEFCA;
+            }
+
+            .posts {
+                display: none;
+                margin-top: 15px;
+            }
+
+            .post-title {
+                margin: 6px 0;
+                padding: 8px 12px;
+                background-color: #94B4C1;
+                color: #213448;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: transform 0.2s, background 0.3s;
+            }
+
+            .post-title:hover {
+                background-color: #ECEFCA;
+                color: #213448;
+                transform: scale(1.02);
+            }
+
+            .btn-back {
+                margin-top: 40px;
+                background-color: #213448;
+                color: #ECEFCA;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 15px;
+                transition: background 0.3s;
+            }
+
+            .btn-back:hover {
+                background-color: #547792;
+            }
+
+            @media screen and (max-width: 768px) {
+                body {
+                    flex-direction: column;
+                }
+
+                .sidebar {
+                    width: 100%;
+                    border-radius: 0;
+                    display: flex;
+                    overflow-x: auto;
+                    white-space: nowrap;
+                    height: auto;
+                }
+
+                .sidebar-user {
+                    margin: 5px;
+                }
+            }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        {% for user in user_posts %}
+            <div class="sidebar-user" onclick="showUserPosts('{{ user }}')">{{ user }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="main-content">
+        <h2>User Posts</h2>
+
+        {% for user, posts in user_posts.items() %}
+            <div class="user-block" id="block-{{ user }}" style="display:none;">
+                <div class="user-header" onclick="togglePosts('{{ user }}')">
+                    {{ user }}
+                    <span>▼</span>
+                </div>
+                <div class="posts" id="posts-{{ user }}">
+                    {% for post in posts %}
+                        <div class="post-title" onclick="window.location.href='/post/{{ post.id }}'">
+                            {{ post.content[:30] }}{% if post.content|length > 30 %}...{% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <a href="{{ dashboard }}">
+            <button class="btn-back">Back to Dashboard</button>
+        </a>
+    </div>
+
+    <script>
+        function togglePosts(user) {
+            let box = document.getElementById('posts-' + user);
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function showUserPosts(user) {
+            document.querySelectorAll('.user-block').forEach(div => div.style.display = 'none');
+            document.getElementById('block-' + user).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
