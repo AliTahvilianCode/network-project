@@ -118,6 +118,20 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    token = request.cookies.get('token')
+    if token:
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            role = payload['role']
+            if role == 'admin':
+                return redirect(url_for('dashboard_admin'))
+            elif role == 'user':
+                return redirect(url_for('dashboard_user'))
+        except jwt.ExpiredSignatureError:
+            pass
+        except jwt.InvalidTokenError:
+            pass
+    
     if not check_session_timeout():
         return redirect(url_for('home'))
 
@@ -154,8 +168,6 @@ def login():
             else:
                 abort(400)
 
-            response.set_cookie('username', user.username, max_age=7*24*60*60 if remember else None)
-            response.set_cookie('role', user.role, max_age=7*24*60*60 if remember else None)
             response.set_cookie('token', token, max_age=7*24*60*60 if remember else None, httponly=True, secure=False)
             return response
         else:
